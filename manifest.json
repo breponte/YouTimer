@@ -3,7 +3,6 @@
     "version": "1.0.0",
     "description": "YouTimer is a Google Extension that shows you how much time YOU spend on each website, for the purposes of reminding you of your time commitments on the web.",
     "manifest_version": 3,
-    "default_locale": "en",
     "author": "Brandon Reponte",
     "permissions": [
         "storage"
@@ -11,5 +10,25 @@
     "action": {
         "default_title": "YouTimer",
         "default_popup": "index.html"
-    }
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "scripts/content.js",
+                "scripts/minimize.js",
+                "scripts/timer.js"
+            ],
+            "css": ["style/index.css"],
+            "matches": ["https://*/*"]
+        }
+    ],
+    "background": {
+        "service_worker": "scripts/background.js"
+    },
+    "web_accessible_resources": [
+        {
+            "resources": ["style/digital_Alarm.ttf"],
+            "matches": ["https://*/*"]
+        }
+    ]
 }
