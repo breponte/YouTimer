@@ -14,20 +14,22 @@
     "content_scripts": [
         {
             "js": [
-                "scripts/content.js",
-                "scripts/minimize.js",
-                "scripts/timer.js"
+                "scripts/content/init.js",
+                "scripts/content/minimize.js",
+                "scripts/content/timer.js"
             ],
             "css": ["style/index.css"],
             "matches": ["https://*/*"]
         }
     ],
     "background": {
-        "service_worker": "scripts/background.js"
+        "service_worker": "scripts/background/background.js"
     },
     "web_accessible_resources": [
         {
-            "resources": ["style/digital_Alarm.ttf"],
+            "resources": [
+                "style/digital_Alarm.ttf"
+            ],
             "matches": ["https://*/*"]
         }
     ]

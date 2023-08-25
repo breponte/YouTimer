@@ -4,49 +4,55 @@
     src: url('chrome-extension://__MSG_@@extension_id__/style/digital_Alarm.ttf');
 }
 
+/* Entire extension */
 #YouTimer {
+    /* Positioning */
     position: -webkit-sticky; /* Safari */
     position: fixed;
     top: 1vh;
     right: 1vw;
+    z-index: 99998;
+
+    /* Dimensions */
     width: 15dvw;
     height: 10dvh;
-    z-index: 99998;
+    
+    /* Interactivity */
+    pointer-events: none;
 }
 
+/* Primary displayed elements */
 #displayModule {
+    /* Positioning */
     display: flex;
     align-items: center;
     justify-content: center;
     padding-top: 1vh;
     padding-bottom: 1vh;
 
+    /* Design */
     background-color: rgb(75, 184, 75, 1);
     border: 1vmin solid rgb(128, 128, 128, 1);
     border-radius: 3%;
 }
 
+/* Displayed numbers */
 #stopwatch {
+    /* Design */
     font-size: 3.25vw;
     font-family: alarmFont;
     color: rgb(0, 0, 0, 1);
-
+    
+    /* Interactivity */
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
 
-.show {
-    opacity: 1;
-}
-
-.hide {
-    opacity: 0;
-    pointer-events: none;
-}
-
+/* Top-right minimize button */
 #minimize {
+    /* Positioning */
     position: absolute;
     top: 0;
     right: 0;
@@ -54,23 +60,41 @@
     height: 2vmin;
     z-index: 99999;
 
+    /* Design */
     text-align: center;
     font-size: 1.5vmin;
-
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(0, 0, 0);
     color: black;
     border-radius: 10%;
 
+    /* Interactivity */
     -webkit-user-select: none; /* Safari */        
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
+    pointer-events: auto;
 }
 
+/* Minimize button onhover event */
 #minimize:hover {
+    /* Design */
     background-color: rgb(190, 225, 255);
     border: 2px solid rgb(145, 200, 255);
     color: white;
+
+    /* Interactivity */
     cursor: pointer;
+}
+
+/* Show YouTimer */
+.show {
+    opacity: 0.9;
+    pointer-events: auto;
+}
+
+/* Minimize YouTimer, overrides .show */
+.hide {
+    opacity: 0;
+    pointer-events: none;
 }
