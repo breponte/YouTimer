@@ -6,44 +6,49 @@
 /**
  * Handle message reception from content scripts
  */
-chrome.runtime.onMessage.addListener(
-    async function(content, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((content, sender, sendResponse) => {
+    handleOnMessage(content, sender, sendResponse);
+    return true;
+});
 
-        // check if content scripts are requesting time for a URL
-        if (content.message === "Requesting stored time for this URL") {
-            console.log("2) Successfully received message from content script: ");
-            console.log(content);
-            const storedTime = await getStoredTime(content);
-            console.log("Sending to content script: ");
-            console.log(storedTime);
-            await sendResponse({
-                message: "Returning stored time for given URL",
-                url: content.url,
-                time: storedTime
-            });
+const handleOnMessage = async function (content, sender, sendResponse) {
 
-        // check if content scripts are requesting to update extension storage
-        } else if (content.message === "Setting stored time for this URL") {
-            await sendResponse({
-                message: "Successfully stored updated time",
-                url: content.url,
-                time: await setStoredTime(content)
-            });
+    // check if content scripts are requesting time for a URL
+    if (content.message === "Requesting stored time for this URL") {
+        console.log("2) Successfully received message from content script: ");
+        console.log(content);
+        const storedTime = await getStoredTime(content);
+        console.log("Sending to content script: ");
+        console.log(storedTime);
+        await sendResponse({
+            message: "Returning stored time for given URL",
+            url: content.url,
+            time: storedTime
+        });
 
-        // could not recognize request from content scripts
-        } else {
-            console.error(`
-                Content script did not send a recognizable request, \n
-                Received: ${content.message}
-            `);
-            await sendResponse({
-                message: "Did not understand request from content scripts",
-                url: null,
-                time: null
-            })
-        }
+    // check if content scripts are requesting to update extension storage
+    } else if (content.message === "Setting stored time for this URL") {
+        await sendResponse({
+            message: "Successfully stored updated time",
+            url: content.url,
+            time: await setStoredTime(content)
+        });
+
+    // could not recognize request from content scripts
+    } else {
+        console.error(`
+            Content script did not send a recognizable request, \n
+            Received: ${content.message}
+        `);
+        await sendResponse({
+            message: "Did not understand request from content scripts",
+            url: null,
+            time: null
+        })
     }
-);
+
+    return true;
+}
 
 /**
  * Retrieve the time corresponding to the given URL within extension's storage

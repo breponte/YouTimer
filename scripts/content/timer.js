@@ -98,9 +98,15 @@ const timerDisplay = document.getElementById("stopwatch");
 
 /* ___INIT___ */
 
-console.log("0) Loaded");
-[hours, minutes, seconds] = ExtensionStorage.getStoredTime();
-setInterval(updateTime, 1000);
+
+
+async function init() {
+    console.log("0) Loaded");
+    [hours, minutes, seconds] = await ExtensionStorage.getStoredTime();
+    setInterval(updateTime, 1000);
+}
+
+init();
 
 /* ___EVENT_LISTENERS___ */
 
