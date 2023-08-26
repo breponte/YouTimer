@@ -62,7 +62,7 @@ async function getStoredTime(content)
         let storedTime = [0, 0, 0];
 
         // if URL does not have a time attached to it, default to 0 time on site
-        if (typeof data !== 'undefined') {
+        if (typeof data !== undefined && data[content.url] !== undefined) {
             storedTime = data[content.url];
             console.log("2.5) Found element:" + storedTime + " of type " + typeof storedTime);
         }
