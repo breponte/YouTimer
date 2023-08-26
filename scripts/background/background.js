@@ -4,13 +4,22 @@
  */
 
 /**
- * Handle message reception from content scripts
+ * Listens for messages from content scripts and handles them
  */
 chrome.runtime.onMessage.addListener((content, sender, sendResponse) => {
     handleOnMessage(content, sender, sendResponse);
     return true;
 });
 
+/**
+ * Handles message reception from content scripts 
+ * @param {Object} content - message received from content scripts
+ * @param {MessageSender} sender - object containing information about the
+ *      script context that sent the message
+ * @param {function} sendResponse - allows for sending the response of the given
+ *      message back to the content scripts
+ * @returns 
+ */
 const handleOnMessage = async function (content, sender, sendResponse) {
 
     // check if content scripts are requesting time for a URL
@@ -43,6 +52,7 @@ const handleOnMessage = async function (content, sender, sendResponse) {
         })
     }
 
+    // needed for asynchronous behavior
     return true;
 }
 
@@ -65,6 +75,7 @@ async function getStoredTime(content)
         return storedTime;
     });
 
+    // ensures that return value is not a promise but a value (array)
     return storedTime;
 }
 

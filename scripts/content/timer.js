@@ -2,88 +2,7 @@
  * This file implements a stopwatch, both its timing and display
  */
 
-class ExtensionStorage {
-    /**
-     * Retrieve the time attached to the URL stored within chrome local storage
-     * @returns extension's stored time for the given URL, else return 
-     *      0 hours, minutes, seconds by default
-     */
-    static async getStoredTime()
-    {
-        // send a request to the background script and store the response
-        const responseExtension = await chrome.runtime.sendMessage({
-            message: "Requesting stored time for this URL",
-            url: domainName,
-            time: null,
-        });;
-
-        // check if background script responded as intended
-        if (responseExtension.message ===
-            "Returning stored time for given URL") {
-            return responseExtension.time;
-
-        // background script failed to respond as intended
-        } else {
-            console.error(`
-                    Background script did not respond correctly, \n
-                    Wanted: \"Returning stored time for given URL\" \n
-                    Received: \"${responseExtension.message}\"
-                `);
-            return [0, 0, 0];
-        }
-    }
-
-    /**
-     * Send current time to update the time stored within chrome local storage
-     * @returns true if successfully communicated, else false
-     */
-    static async setStoredTime()
-    {
-        // send a request to the background script and store the response
-        const responseExtension = await chrome.runtime.sendMessage({
-            message: "Setting stored time for this URL",
-            url: domainName,
-            time: [hours, minutes, seconds]
-        });
-        
-        // check if background script responded as intended
-        if (responseExtension.message ===
-            "Successfully stored updated time") {
-            return true;
-
-        // background script failed to respond as intended
-        } else { 
-            console.error(`
-                    Background script did not respond correctly, \n
-                    Wanted: \"Successfully stored updated time\" \n
-                    Received: \"${responseExtension.message}\"
-                `);
-            return false;
-        }
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ___VARIABLES___ */
+/* ___VARIABLES/REFERENCES___ */
 
 const domainName = window.location.hostname;
 let hours = 0;
@@ -93,19 +12,34 @@ const timerDisplay = document.getElementById("stopwatch");
 
 /* ___INIT___ */
 
-
-
+/**
+ * Initialize and startup
+ */
 async function init() {
-    [hours, minutes, seconds] = await ExtensionStorage.getStoredTime();
-    setInterval(updateTime, 1000);
+    /* dynamic import */
+    const src = chrome.runtime.getURL("scripts/content/storage.js");
+    const storageJS = await import(src);
+
+    // initialize time to stored time
+    [hours, minutes, seconds] =
+        await storageJS.ExtensionStorage.getStoredTime();
+    
+    setInterval(updateTime, 1000);      // start the clock
 }
 
-init();
+init();                                 // run the code
 
 /* ___EVENT_LISTENERS___ */
 
+/**
+ * Listen for the page unloading, and store the current time before unloading
+ */
 window.addEventListener("beforeunload", async () => {
-    if(!ExtensionStorage.setStoredTime()) {
+    /* dynamic import */
+    const src = chrome.runtime.getURL("scripts/content/storage.js");
+    const storageJS = await import(src);
+
+    if(!storageJS.ExtensionStorage.setStoredTime()) {
         console.error("Error storing time");
     }
 });
@@ -119,11 +53,13 @@ function updateTime()
 {
     seconds++;
 
+    /* seconds rollover to minutes */
     if (seconds == 60) {
         seconds = 0;
         minutes++;
     }
 
+    /* minutes rollover to hours */
     if (minutes == 60) {
         minutes = 0;
         hours++;

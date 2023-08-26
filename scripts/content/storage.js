@@ -64,4 +64,5 @@ class ExtensionStorage {
     }
 }
 
+// export (to timer.js)
 export { ExtensionStorage };

@@ -19,6 +19,7 @@
                 "scripts/content/timer.js"
             ],
             "css": ["style/index.css"],
+            "type": "module",
             "matches": ["https://*/*"]
         }
     ],
@@ -28,7 +29,8 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "style/digital_Alarm.ttf"
+                "style/digital_Alarm.ttf",
+                "scripts/content/storage.js"
             ],
             "matches": ["https://*/*"]
         }
