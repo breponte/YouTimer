@@ -15,11 +15,7 @@ const handleOnMessage = async function (content, sender, sendResponse) {
 
     // check if content scripts are requesting time for a URL
     if (content.message === "Requesting stored time for this URL") {
-        console.log("2) Successfully received message from content script: ");
-        console.log(content);
         const storedTime = await getStoredTime(content);
-        console.log("Sending to content script: ");
-        console.log(storedTime);
         await sendResponse({
             message: "Returning stored time for given URL",
             url: content.url,
@@ -64,14 +60,11 @@ async function getStoredTime(content)
         // if URL does not have a time attached to it, default to 0 time on site
         if (typeof data !== undefined && data[content.url] !== undefined) {
             storedTime = data[content.url];
-            console.log("2.5) Found element:" + storedTime + " of type " + typeof storedTime);
         }
 
-        console.log("Current stored time: " + storedTime + " of type " + typeof storedTime);
         return storedTime;
     });
 
-    console.log("Outside of await, " + storedTime + " of type " + typeof storedTime);
     return storedTime;
 }
 

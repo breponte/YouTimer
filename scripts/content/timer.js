@@ -10,7 +10,6 @@ class ExtensionStorage {
      */
     static async getStoredTime()
     {
-        console.log("1) Startup, retrieving stored time");
         // send a request to the background script and store the response
         const responseExtension = await chrome.runtime.sendMessage({
             message: "Requesting stored time for this URL",
@@ -18,13 +17,9 @@ class ExtensionStorage {
             time: null,
         });;
 
-        console.log("3) Successfully returned to content script, let's see what we got:");
-        console.log(responseExtension);
-
         // check if background script responded as intended
         if (responseExtension.message ===
             "Returning stored time for given URL") {
-            console.log("4) Correct message received from service worker");
             return responseExtension.time;
 
         // background script failed to respond as intended
@@ -101,7 +96,6 @@ const timerDisplay = document.getElementById("stopwatch");
 
 
 async function init() {
-    console.log("0) Loaded");
     [hours, minutes, seconds] = await ExtensionStorage.getStoredTime();
     setInterval(updateTime, 1000);
 }
