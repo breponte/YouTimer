@@ -1,6 +1,7 @@
 /**
- * This file is a content script that communicates requests to the background
+ * This file is a helper script that communicates requests to the background
  * scripts for urls and their times within the storage
+ * NOT A CONTENT SCRIPT, but is used for importing helpful functions
  */
 
 class ExtensionStorage {
